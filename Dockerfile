@@ -18,6 +18,7 @@ RUN apt-get -qq update && \
       curl \
       html2text \
       openjdk-8-jdk \
+      openjdk-8-jre-headless \
       libc6-i386 \
       lib32stdc++6 \
       lib32gcc1 \
@@ -34,6 +35,10 @@ RUN apt-get -qq update && \
       libqt5widgets5 \
       libqt5svg5 \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN curl -s https://get.sdkman.io | bash
+RUN source "/root/.sdkman/bin/sdkman-init.sh"
+RUN sdk install kotlin
 
 RUN rm -f /etc/ssl/certs/java/cacerts; \
     /var/lib/dpkg/info/ca-certificates-java.postinst configure
