@@ -1,0 +1,6 @@
+version: '2'
+services:
+  launcher:
+    build: .
+    image: msuri/suri-fastlane-android-ci
+    
