@@ -36,9 +36,9 @@ RUN apt-get -qq update && \
       libqt5svg5 \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN curl -s https://get.sdkman.io | bash
-RUN source "/root/.sdkman/bin/sdkman-init.sh"
-RUN sdk install kotlin
+#RUN curl -s https://get.sdkman.io | bash
+#RUN source "/root/.sdkman/bin/sdkman-init.sh"
+#RUN sdk install kotlin
 
 RUN rm -f /etc/ssl/certs/java/cacerts; \
     /var/lib/dpkg/info/ca-certificates-java.postinst configure
