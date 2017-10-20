@@ -5,6 +5,7 @@
 * Add SonarQube
 * Create regions for each topic and tool
 * Create version configurator for SonarQube and Fastlane
+* No git login downloading public projects
 
 -----
 ## 1.0.2 Remove Kotlin

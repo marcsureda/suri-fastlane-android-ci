@@ -43,6 +43,9 @@ RUN apt-get -qq update && \
 #RUN source "/root/.sdkman/bin/sdkman-init.sh"
 #RUN sdk install kotlin
 
+#GIT CONFIGURATION
+RUN git config --global http.sslverify false
+
 #INSTALL SONARQUBE
 RUN mkdir /opt/sonar-scanner-cli
 ADD https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONARQUBE_VERSION}-linux.zip /sonar-scanner-linux.zip
