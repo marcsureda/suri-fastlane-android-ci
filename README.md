@@ -1,13 +1,31 @@
-**To build the image without docker-compose**
-docker build -t msuri/suri-fastlane-android-ci .
+Welcome to Fastlane for Android CI!
+=============================
 
-**To run without docker-compose**
-docker run -it --rm msuri/suri-fastlane-android-ci bash
+This is a docker image used to create the Continuous Integration Pipeline for Android.
+It is using the fastlane tool.
+It include:
 
-**To execute docker compose**
-docker-compose down --rmi all
-docker-compose build
-docker-compose up --build -d
+ - Fastlane 2.62.0
+ - Git
+ - SonarQube 3.0.3.778
+ - Android SDK 26.0.2
+ - Android AVD preconfigured with ARM SDK 25. To run it is needed: *emulator64-arm @test -no-window -no-audio -gpu off &*
 
-**To stop them**
-docker-compose stop
+----------
+
+
+How to run the image
+------------------------------
+
+    docker run -it --rm msuri/suri-fastlane-android-ci bash
+
+
+Options to build manually the image
+----------------------------------------------------
+
+    docker build -t msuri/suri-fastlane-android-ci .
+
+or you can use the docker-compose
+
+    docker-compose build
+    docker-compose down --rmi all  (to remove all created)
