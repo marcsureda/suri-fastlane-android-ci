@@ -5,10 +5,12 @@ MAINTAINER Marc Sureda <marc.sureda@gmail.com>
 ENV VERSION_SDK_TOOLS "3859397"
 ENV VERSION_BUILD_TOOLS "26.0.2"
 ENV VERSION_TARGET_SDK "26"
-ENV VERSION_ARM_EMULATOR "25"
+ENV VERSION_ARM_EMULATOR "23"
 ENV FASTLANE_VERSION "2.62.0"
 ENV SONARQUBE_VERSION "3.0.3.778"
 ENV ANDROID_HOME "/sdk"
+ENV KOTLIN_VERSION "1.1.50"
+ENV KOTLIN_HOME "/usr/local/kotlin"
 ENV PATH "$PATH:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools"
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -20,7 +22,6 @@ RUN apt-get -qq update && \
       curl \
       html2text \
       openjdk-8-jdk \
-#      openjdk-8-jre-headless \
       libc6-i386 \
       lib32stdc++6 \
       lib32gcc1 \
@@ -39,9 +40,11 @@ RUN apt-get -qq update && \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 #INSTALL KOTLIN
-#RUN curl -s https://get.sdkman.io | bash
-#RUN source "/root/.sdkman/bin/sdkman-init.sh"
-#RUN sdk install kotlin
+RUN mkdir ${KOTLIN_HOME}
+ADD https://github.com/JetBrains/kotlin/releases/download/v${KOTLIN_VERSION}/kotlin-compiler-${KOTLIN_VERSION}.zip /kotlin.zip
+RUN unzip /kotlin.zip -d ${KOTLIN_HOME} && rm -v /kotlin.zip
+RUN chmod +x ${KOTLIN_HOME}/kotlinc/bin/*
+ENV PATH "$PATH:${KOTLIN_HOME}/kotlinc/bin/"
 
 #GIT CONFIGURATION
 RUN git config --global http.sslverify false
@@ -67,7 +70,6 @@ RUN mkdir -p $HOME/.android && touch $HOME/.android/repositories.cfg
 RUN ${ANDROID_HOME}/tools/bin/sdkmanager "tools" "platforms;android-${VERSION_TARGET_SDK}" "build-tools;${VERSION_BUILD_TOOLS}"
 RUN ${ANDROID_HOME}/tools/bin/sdkmanager "extras;android;m2repository" "extras;google;google_play_services" "extras;google;m2repository"
 RUN ${ANDROID_HOME}/tools/bin/sdkmanager "emulator" "system-images;android-${VERSION_ARM_EMULATOR};google_apis;armeabi-v7a"
-RUN ${ANDROID_HOME}/tools/bin/sdkmanager "cmake;3.6.4111459"
 
 #CREATE NEW EMULATOR DEVICE
 RUN echo no | ${ANDROID_HOME}/tools/bin/avdmanager create avd -f --name test --abi google_apis/armeabi-v7a --package "system-images;android-${VERSION_ARM_EMULATOR};google_apis;armeabi-v7a"

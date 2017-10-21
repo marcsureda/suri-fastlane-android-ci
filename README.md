@@ -9,7 +9,8 @@ It include:
  - Git
  - SonarQube 3.0.3.778
  - Android SDK 26.0.2
- - Android AVD preconfigured with ARM SDK 25. To run it is needed: *emulator64-arm @test -no-window -no-audio -gpu off &*
+ - Kotlin 1.1.50
+ - Android AVD preconfigured with ARM SDK 23. To run it is needed: *emulator64-arm @test -no-window -no-audio -gpu off &*
 
 ----------
 
@@ -17,7 +18,7 @@ It include:
 How to run the image
 ------------------------------
 
-    docker run -it --rm msuri/suri-fastlane-android-ci bash
+    docker run -v {host}:{container} -it --rm msuri/suri-fastlane-android-ci bash
 
 
 Options to build manually the image

@@ -1,6 +1,13 @@
 # Change Log
 -----
-## 1.0.3 Add SonarQube
+## 1.0.4 Kotlin
+### Changes
+* Add Kotlin
+* Version for emulator api 23
+* Remove cmake module
+
+-----
+## 1.0.3 SonarQube
 ### Changes
 * Add SonarQube
 * Create regions for each topic and tool
