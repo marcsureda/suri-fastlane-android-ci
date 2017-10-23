@@ -30,3 +30,15 @@ or you can use the docker-compose
 
     docker-compose build
     docker-compose down --rmi all  (to remove all created)
+
+To take into account (Virtual device)
+----------------------------------------------------
+To generate the virtual device is needed to execute:
+
+    emulator64-arm @test -no-window -no-audio -gpu off &
+
+Take into account that you can use this virtual device to execute UI tests and also get screenshots, but the screenshots retrieved will be a black square png.
+We are executing it as -no-window it means that there is no screen to capture.
+In case you want to do some snapshots is needed to connect another external devices with the command:
+	
+	adb connect {ip}:{port}
