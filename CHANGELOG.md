@@ -1,5 +1,8 @@
 # Change Log
 -----
+## 1.0.5 Update SDK version
+* Update the SDK Android version to 27
+
 ## 1.0.4 Kotlin
 ### Changes
 * Add Kotlin
