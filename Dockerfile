@@ -37,6 +37,7 @@ RUN apt-get -qq update && \
       ssh \
       libqt5widgets5 \
       libqt5svg5 \
+      jq \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 #INSTALL KOTLIN
