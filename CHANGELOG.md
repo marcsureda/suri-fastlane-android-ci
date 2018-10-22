@@ -1,5 +1,10 @@
 # Change Log
 -----
+## 2.0.0 Update libraries and remove some non used tools
+* Update Android SDK tools, Fastlane and SonarQube
+* Remove Kotlin, certificates and emulator tools
+
+-----
 ## 1.0.6 Add JQ
 * Added JQ dependency
 

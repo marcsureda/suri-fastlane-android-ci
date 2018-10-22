@@ -1,24 +1,30 @@
-FROM ubuntu:17.04
-MAINTAINER Marc Sureda <marc.sureda@gmail.com>
+FROM ubuntu:18.04
 
-#DECLARE ENVIRONMENT VARIABLES
-ENV VERSION_SDK_TOOLS "3859397"
-ENV VERSION_BUILD_TOOLS "27.0.0"
-ENV VERSION_TARGET_SDK "27"
-ENV VERSION_ARM_EMULATOR "23"
-ENV FASTLANE_VERSION "2.62.0"
-ENV SONARQUBE_VERSION "3.0.3.778"
-ENV ANDROID_HOME "/sdk"
-ENV KOTLIN_VERSION "1.1.50"
-ENV KOTLIN_HOME "/usr/local/kotlin"
-ENV PATH "$PATH:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools"
+LABEL maintainer "marc.sureda@gmail.com"
+
+# Environment variables for non interactive debconf frontend (anti-frontend). This means it never interacts with you at all, and makes the default answers be used for all questions
 ENV DEBIAN_FRONTEND noninteractive
-
+# Environment variables for versions
+ENV SONARQUBE_VERSION "3.2.0.1227"
+ENV ANDROID_SDK_TOOLS_VERSION "4333796"
+ENV FASTLANE_VERSION "2.107.0"
+# Environment variables for paths
 ENV HOME "/root"
+ENV ANDROID_HOME "/sdk"
 
-#INSTALL NECESSARY LIBRARIES AND TOOLS
-RUN apt-get -qq update && \
-    apt-get install -qqy --no-install-recommends \
+# Update + install apt-utils to avoid multiple warnings of: "debconf: delaying package configuration, since apt-utils is not installed"
+RUN apt-get update && apt-get install -qqy apt-utils
+# Upgrade
+RUN apt-get upgrade -qqy
+
+# Set the en_US locale
+RUN apt-get -qqy install locales
+RUN locale-gen en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+ENV LANG en_US.UTF-8 
+
+# Install packages
+RUN apt-get install -qqy --no-install-recommends \
       curl \
       html2text \
       openjdk-8-jdk \
@@ -40,46 +46,30 @@ RUN apt-get -qq update && \
       jq \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-#INSTALL KOTLIN
-RUN mkdir ${KOTLIN_HOME}
-ADD https://github.com/JetBrains/kotlin/releases/download/v${KOTLIN_VERSION}/kotlin-compiler-${KOTLIN_VERSION}.zip /kotlin.zip
-RUN unzip /kotlin.zip -d ${KOTLIN_HOME} && rm -v /kotlin.zip
-RUN chmod +x ${KOTLIN_HOME}/kotlinc/bin/*
-ENV PATH "$PATH:${KOTLIN_HOME}/kotlinc/bin/"
-
-#GIT CONFIGURATION
+# Git configuration
 RUN git config --global http.sslverify false
 
-#INSTALL SONARQUBE
-RUN mkdir /opt/sonar-scanner-cli
-ADD https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONARQUBE_VERSION}-linux.zip /sonar-scanner-linux.zip
-RUN unzip /sonar-scanner-linux.zip -d /opt/sonar-scanner-cli && rm -v /sonar-scanner-linux.zip
-ENV PATH "$PATH:/opt/sonar-scanner-cli/sonar-scanner-${SONARQUBE_VERSION}-linux/bin"
+# Certificates
+RUN rm -f /etc/ssl/certs/java/cacerts; /var/lib/dpkg/info/ca-certificates-java.postinst configure
 
-#CERTIFICATES
-RUN rm -f /etc/ssl/certs/java/cacerts; \
-    /var/lib/dpkg/info/ca-certificates-java.postinst configure
-
-#INSTALL/CONFIGURE ANDROID TOOLS
-ADD https://dl.google.com/android/repository/sdk-tools-linux-${VERSION_SDK_TOOLS}.zip /tools.zip
-RUN unzip /tools.zip -d /sdk && \
-    rm -v /tools.zip
-
-RUN yes | ${ANDROID_HOME}/tools/bin/sdkmanager --licenses
-
-RUN mkdir -p $HOME/.android && touch $HOME/.android/repositories.cfg
-RUN ${ANDROID_HOME}/tools/bin/sdkmanager "tools" "platforms;android-${VERSION_TARGET_SDK}" "build-tools;${VERSION_BUILD_TOOLS}"
-RUN ${ANDROID_HOME}/tools/bin/sdkmanager "extras;android;m2repository" "extras;google;google_play_services" "extras;google;m2repository"
-RUN ${ANDROID_HOME}/tools/bin/sdkmanager "emulator" "system-images;android-${VERSION_ARM_EMULATOR};google_apis;armeabi-v7a"
-
-#CREATE NEW EMULATOR DEVICE
-RUN echo no | ${ANDROID_HOME}/tools/bin/avdmanager create avd -f --name test --abi google_apis/armeabi-v7a --package "system-images;android-${VERSION_ARM_EMULATOR};google_apis;armeabi-v7a"
-
-##INSTALL FASTLANE
+# Install Fastlane
 RUN gem install fastlane -v ${FASTLANE_VERSION}
 
-#CONFIGURE CERTIFICATES
-ADD id_rsa $HOME/.ssh/id_rsa
-ADD id_rsa.pub $HOME/.ssh/id_rsa.pub
-ADD adbkey $HOME/.android/adbkey
-ADD adbkey.pub $HOME/.android/adbkey.pub
+# Install SonarQube
+RUN mkdir /opt/sonar-scanner-cli
+ADD https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONARQUBE_VERSION}-linux.zip /sonar-scanner-linux.zip
+RUN unzip -qq /sonar-scanner-linux.zip -d /opt/sonar-scanner-cli && rm -v /sonar-scanner-linux.zip
+ENV PATH "$PATH:/opt/sonar-scanner-cli/sonar-scanner-${SONARQUBE_VERSION}-linux/bin"
+
+# Install Android SDK tools
+ADD https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_SDK_TOOLS_VERSION}.zip /tools.zip
+RUN unzip -qq /tools.zip -d $ANDROID_HOME && rm -v /tools.zip
+ENV PATH "$PATH:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/emulator"
+# Configure Android SDK tools
+RUN mkdir -p $HOME/.android && touch $HOME/.android/repositories.cfg
+RUN yes | sdkmanager --licenses
+RUN sdkmanager "tools" "platform-tools" "extras;android;m2repository" "extras;google;google_play_services" "extras;google;m2repository"
+ENV PATH "$PATH:${ANDROID_HOME}/platform-tools"
+
+
+
