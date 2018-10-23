@@ -5,12 +5,10 @@ This is a docker image used to create the Continuous Integration Pipeline for An
 It is using the fastlane tool.
 It include:
 
- - Fastlane 2.62.0
+ - Fastlane 2.107.0
  - Git
- - SonarQube 3.0.3.778
- - Android SDK 27.0.0
- - Kotlin 1.1.50
- - Android AVD preconfigured with ARM SDK 23. To run it is needed: *emulator64-arm @test -no-window -no-audio -gpu off &*
+ - SonarQube 3.2.0.1227
+ - Android Tools 4333796
 
 ----------
 
