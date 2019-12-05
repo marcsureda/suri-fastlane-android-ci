@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND noninteractive
 # Environment variables for versions
 ENV SONARQUBE_VERSION "3.2.0.1227"
 ENV ANDROID_SDK_TOOLS_VERSION "4333796"
-ENV FASTLANE_VERSION "2.107.0"
+ENV FASTLANE_VERSION "2.137.0"
 # Environment variables for paths
 ENV HOME "/root"
 ENV ANDROID_HOME "/sdk"
