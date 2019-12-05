@@ -5,7 +5,7 @@ This is a docker image used to create the Continuous Integration Pipeline for An
 It is using the fastlane tool.
 It include:
 
- - Fastlane 2.107.0
+ - Fastlane 2.137.0
  - Git
  - SonarQube 3.2.0.1227
  - Android Tools 4333796
