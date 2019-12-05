@@ -1,5 +1,9 @@
 # Change Log
 -----
+## 1.1.1 Update versions and remove non used logic
+ * Update Fastlane to version 2.137.0
+-----
+ 
 ## 1.1.0 Update versions and remove non used logic
 * Update versions of all tools
 * Remove non used tools like emulator, kotlin (can be downloaded with gradle)
