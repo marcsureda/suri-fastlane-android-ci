@@ -1,5 +1,9 @@
 # Change Log
 -----
+## 1.2.1 Update versions and remove non used logic
+### Fix
+ * Fix wrong character in Dockerfile version for JSON
+
 ## 1.2.0 Update versions and remove non used logic
 ### Changes
  * Add Bundler installation
