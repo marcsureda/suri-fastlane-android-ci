@@ -1,5 +1,14 @@
 # Change Log
 -----
+## 1.2.0 Update versions and remove non used logic
+### Changes
+ * Add Bundler installation
+ * Add Firebase CLI installation
+ * Add Fastlane Firebase plugin gem version 0.1.4
+ * Add JSON version 2.3.0
+ * Add sudo package to system pacakges installation
+ * Update Fastlane to version 2.143.0
+
 ## 1.1.1 Update versions and remove non used logic
  * Update Fastlane to version 2.137.0
 -----
